@@ -1,11 +1,10 @@
-name = "timeline-app"
-
+name = "yuchat"
 compatibility_date = "2024-01-01"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "timeline"
-database_id = "你的真实ID"
+database_name = "yuchat"
+database_id = "4b39abac-f1ac-458c-a827-b15b16611420"
 
 [[r2_buckets]]
 binding = "BUCKET"
