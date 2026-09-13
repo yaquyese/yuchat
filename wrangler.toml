@@ -1,0 +1,12 @@
+name = "timeline-app"
+
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "timeline"
+database_id = "你的真实ID"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "files"
