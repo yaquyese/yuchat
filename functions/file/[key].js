@@ -1,5 +1,7 @@
 export async function onRequestGet({ params, env }) {
-  const object = await env.BUCKET.get(params.key);
+  const key = decodeURIComponent(params.key);
+
+  const object = await env.BUCKET.get(key);
 
   if (!object) {
     return new Response("Not found", { status: 404 });
