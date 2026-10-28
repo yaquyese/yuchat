@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fc">
+<title>YuTool · 实用工具箱</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{brand:{50:'#eef2ff',100:'#e0e7ff',500:'#6366f1',600:'#4f46e5',700:'#4338ca'},ink:'#172033'},boxShadow:{panel:'0 14px 40px rgba(28,39,76,.07)'}}}}
+</script>
+<style>
+*{box-sizing:border-box}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif}
+button,input,textarea{font:inherit}textarea{resize:vertical}.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{scrollbar-width:none}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;border-radius:13px;padding:11px 12px;text-align:left;font-size:14px;font-weight:600;color:#667085;transition:.16s}
+.nav-item:hover{background:#f4f5ff;color:#3730a3}.nav-item.active{background:#eef2ff;color:#4338ca;box-shadow:inset 0 0 0 1px #e0e7ff}
+.tool-view{display:none}.tool-view.active{display:block}.result-value{overflow-wrap:anywhere;word-break:break-word}.copy-btn:active{transform:scale(.97)}
+@media(max-width:767px){.mobile-drawer{transform:translateX(-105%);transition:transform .22s ease}.mobile-drawer.open{transform:translateX(0)}}
+</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+  <div class="absolute -top-48 left-[-8rem] h-96 w-96 rounded-full bg-indigo-200/35 blur-3xl"></div>
+  <div class="absolute right-[-9rem] top-44 h-96 w-96 rounded-full bg-sky-200/30 blur-3xl"></div>
+</div>
+
+<div class="min-h-screen md:flex">
+  <!-- Desktop sidebar -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 md:flex-col md:fixed md:inset-y-0 md:left-0 border-r border-slate-200/80 bg-white/90 backdrop-blur-xl">
+    <div class="flex h-[76px] items-center gap-3 border-b border-slate-100 px-6">
+      <div class="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white shadow-lg shadow-indigo-500/20">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="3" y="15" width="7" height="6" rx="2"/><rect x="14" y="15" width="7" height="6" rx="2"/></svg>
+      </div>
+      <div><div class="font-bold tracking-tight text-slate-900">YuTool</div><div class="text-[11px] text-slate-400">个人实用工具箱</div></div>
+    </div>
+    <div class="px-4 pt-6">
+      <div class="mb-2 px-3 text-[11px] font-bold uppercase tracking-[.16em] text-slate-400">工具集合</div>
+      <nav class="space-y-1">
+        <button class="nav-item active" data-view="cleaner">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-white text-indigo-600 shadow-sm">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h16M4 12h10M4 19h7"/><circle cx="18" cy="16" r="3"/><path d="m20.2 18.2 2 2"/></svg>
+          </span>
+          <span class="flex-1">文本清洗</span><span class="rounded-md bg-indigo-100 px-1.5 py-0.5 text-[10px] text-indigo-700">NEW</span>
+        </button>
+        <button class="nav-item" data-view="chat">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100 text-slate-600">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.9 7.3L3 20l1.2-4.3A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8 11h8M8 8h5"/></svg>
+          </span>
+          <span class="flex-1">Timeline Chat</span>
+        </button>
+      </nav>
+      <div class="mb-2 mt-8 px-3 text-[11px] font-bold uppercase tracking-[.16em] text-slate-400">更多工具</div>
+      <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-4">
+        <div class="mb-2 flex items-center gap-2 text-slate-500"><span class="text-lg">＋</span><span class="text-sm font-semibold">预留扩展位置</span></div>
+        <p class="text-xs leading-5 text-slate-400">以后可以在这里加入 JSON 格式化、二维码、文本对比等小工具。</p>
+      </div>
+    </div>
+    <div class="mt-auto border-t border-slate-100 p-4">
+      <div class="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
+        <div class="grid h-9 w-9 place-items-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">Y</div>
+        <div><div class="text-sm font-semibold text-slate-700">我的工具箱</div><div class="text-xs text-slate-400">轻量 · 便捷 · 集中管理</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile drawer -->
+  <div id="drawerBackdrop" class="fixed inset-0 z-40 hidden bg-slate-950/30 backdrop-blur-[2px] md:hidden"></div>
+  <aside id="mobileDrawer" class="mobile-drawer fixed inset-y-0 left-0 z-50 w-[min(82vw,300px)] bg-white shadow-2xl md:hidden">
+    <div class="flex h-[72px] items-center justify-between border-b border-slate-100 px-5">
+      <div class="flex items-center gap-3"><div class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white font-bold">Y</div><div><div class="font-bold text-slate-900">YuTool</div><div class="text-[11px] text-slate-400">个人实用工具箱</div></div></div>
+      <button id="closeDrawer" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100" aria-label="关闭菜单">✕</button>
+    </div>
+    <div class="px-4 pt-5">
+      <div class="mb-2 px-3 text-[11px] font-bold uppercase tracking-[.16em] text-slate-400">工具集合</div>
+      <nav class="space-y-1">
+        <button class="nav-item active" data-view="cleaner"><span>✦</span><span class="flex-1">文本清洗</span><span class="text-xs text-indigo-500">NEW</span></button>
+        <button class="nav-item" data-view="chat"><span>◷</span><span class="flex-1">Timeline Chat</span></button>
+      </nav>
+      <div class="mb-2 mt-7 px-3 text-[11px] font-bold uppercase tracking-[.16em] text-slate-400">更多工具</div>
+      <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-400">这里预留给以后新增的小工具。</div>
+    </div>
+  </aside>
+
+  <div class="min-w-0 flex-1 md:ml-64 lg:ml-72">
+    <header class="sticky top-0 z-30 flex h-[68px] items-center justify-between border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+      <div class="flex min-w-0 items-center gap-3">
+        <button id="openDrawer" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm md:hidden" aria-label="打开工具菜单">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="min-w-0"><div id="pageTitle" class="truncate text-base font-bold text-slate-900 sm:text-lg">文本清洗台</div><div id="pageSubtitle" class="hidden text-xs text-slate-400 sm:block">从杂乱文本中提取有用信息</div></div>
+      </div>
+      <div class="flex items-center gap-2"><span class="hidden rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 sm:inline-flex"><span class="mr-1.5 mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500"></span>本地工具</span><button id="headerClear" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 sm:text-sm">清空</button></div>
+    </header>
+
+    <main class="mx-auto max-w-[1500px] p-4 sm:p-6 lg:p-8">
+      <!-- Text Cleaner -->
+      <section id="view-cleaner" class="tool-view active">
+        <div class="mb-6">
+          <div class="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-white/80 px-3 py-1.5 text-xs font-semibold text-indigo-700 shadow-sm"><span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>工具 01 · 文本处理</div>
+          <h1 class="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">把杂乱文字，整理成清晰结果。</h1>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">粘贴聊天记录、分享文案或混合字段，自动识别链接、邮箱、账号标识、密码、卡密和数字串。</p>
+        </div>
+        <div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2 xl:gap-6">
+          <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-panel">
+            <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6"><div><h2 class="font-semibold text-slate-900">输入文本</h2><p class="mt-0.5 text-xs text-slate-500">所有识别都在当前浏览器内执行</p></div><span id="charCount" class="rounded-full bg-slate-100 px-2.5 py-1 text-xs tabular-nums text-slate-500">0 字符</span></div>
+            <div class="p-4 sm:p-6">
+              <textarea id="source" spellcheck="false" class="min-h-64 w-full rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm leading-7 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100 sm:min-h-80 sm:text-base" placeholder="粘贴需要清洗的文本……&#10;&#10;例如：STEAM号：example123 密：examplePass&#10;邮箱号：name@example.com 密：mailPass&#10;https://example.com"></textarea>
+              <div class="mt-4 flex flex-wrap gap-2.5">
+                <button id="extractBtn" class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 sm:flex-none" type="button"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>提取数据</button>
+                <button id="clearInput" class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50" type="button">清空输入</button>
+                <button id="sampleBtn" class="rounded-xl px-3 py-3 text-sm font-semibold text-indigo-600 hover:bg-indigo-50" type="button">示例文本</button>
+              </div>
+              <div class="mt-5 flex flex-wrap gap-x-5 gap-y-3 border-t border-slate-100 pt-4">
+                <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600"><input id="dedupe" type="checkbox" checked class="h-4 w-4 rounded accent-indigo-600">去除重复项</label>
+                <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600"><input id="numbers" type="checkbox" checked class="h-4 w-4 rounded accent-indigo-600">提取数字串</label>
+                <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600"><input id="secrets" type="checkbox" checked class="h-4 w-4 rounded accent-indigo-600">提取密码/卡密</label>
+              </div>
+              <div class="mt-5 flex gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4"><div class="mt-0.5 text-indigo-600">ⓘ</div><p class="text-xs leading-5 text-slate-600 sm:text-sm"><span class="font-semibold text-slate-800">纯前端，本地处理。</span>本工具不会主动上传输入内容。识别规则可能有遗漏，请复制前核对结果；真实凭据请只在可信设备上处理。</p></div>
+              <p id="status" role="status" aria-live="polite" class="mt-3 min-h-5 text-sm text-emerald-700"></p>
+            </div>
+          </section>
+          <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-panel">
+            <div class="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 sm:px-6"><div><h2 class="font-semibold text-slate-900">提取结果</h2><p class="mt-0.5 text-xs text-slate-500">每项单独复制，也可批量复制</p></div><div class="flex items-center gap-2"><span id="resultCount" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700">0 项</span><button id="copyAll" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-40" disabled type="button">复制全部</button></div></div>
+            <div id="results" class="space-y-3 p-4 sm:p-5"><div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-5 py-12 text-center"><div class="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-white text-slate-400 shadow-sm">⌕</div><p class="font-semibold text-slate-700">结果会显示在这里</p><p class="mt-1 text-sm text-slate-500">先粘贴文本，再点击“提取数据”</p></div></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- Existing Timeline Chat, migrated into a tool view -->
+      <section id="view-chat" class="tool-view">
+        <div class="mb-5"><div class="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-700 shadow-sm">工具 02 · 文件与消息</div><h1 class="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Timeline Chat</h1><p class="mt-2 text-sm text-slate-500">保留原有的消息与文件功能。</p></div>
+        <div class="flex h-[calc(100dvh-220px)] min-h-[420px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-panel">
+          <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3 sm:px-5"><div><div class="font-semibold text-slate-800">时间线</div><div id="chatStatus" class="text-xs text-slate-400">正在连接服务…</div></div><button id="chatClear" class="rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-100" type="button">清空记录</button></div>
+          <div id="chat" class="hide-scrollbar flex-1 space-y-3 overflow-y-auto bg-slate-50/70 p-4 sm:p-5"><div class="py-10 text-center text-sm text-slate-400">正在加载记录…</div></div>
+          <div class="flex items-center gap-2 border-t border-slate-100 bg-white p-3 sm:p-4">
+            <input id="chatInput" class="min-w-0 flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100" placeholder="输入内容，按 Enter 发送">
+            <input type="file" id="chatFile" class="hidden">
+            <button id="pickFile" class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-slate-200 text-xl text-slate-600 hover:bg-slate-50" type="button" title="上传文件">＋</button>
+            <button id="sendChat" class="rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700" type="button">发送</button>
+          </div>
+        </div>
+      </section>
+      <footer class="mt-7 pb-3 text-center text-xs text-slate-400">YuTool · 把常用小工具放在一个地方</footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const pageMeta = {
+    cleaner: ['文本清洗台','从杂乱文本中提取有用信息'],
+    chat: ['Timeline Chat','消息与文件时间线']
+  };
+  function switchView(name) {
+    document.querySelectorAll('.tool-view').forEach(el => el.classList.toggle('active', el.id === `view-${name}`));
+    document.querySelectorAll('[data-view]').forEach(el => el.classList.toggle('active', el.dataset.view === name));
+    $('pageTitle').textContent = pageMeta[name][0];
+    $('pageSubtitle').textContent = pageMeta[name][1];
+    $('headerClear').textContent = name === 'cleaner' ? '清空' : '刷新';
+    closeDrawer();
+    if (name === 'chat') loadChat();
+  }
+  document.querySelectorAll('[data-view]').forEach(btn => btn.addEventListener('click', () => switchView(btn.dataset.view)));
+  const drawer = $('mobileDrawer'), backdrop = $('drawerBackdrop');
+  function openDrawer(){drawer.classList.add('open');backdrop.classList.remove('hidden')}
+  function closeDrawer(){drawer.classList.remove('open');backdrop.classList.add('hidden')}
+  $('openDrawer').addEventListener('click',openDrawer); $('closeDrawer').addEventListener('click',closeDrawer); backdrop.addEventListener('click',closeDrawer);
+
+  // Text cleaner
+  const source = $('source'); let extracted = [];
+  const sample = `2.56 复制打开抖音，看看【某个作品】阿芙阿芙，你真的是一只鸟么？ # 白银之城 # 漫... https://v.douyin.com/example/ :0pm jCU:/ i@c.Ag 10/30
+
+STEAM号：exampleSteam123 密：examplePass456
+邮箱号：demo@example.com 密：mailPass789
+=======
+邮箱登录地址：pimay.cn
+卡密：ABCD-EFGH-IJKL-MNOP`;
+  function updateCount(){ $('charCount').textContent = `${source.value.length.toLocaleString()} 字符`; }
+  source.addEventListener('input',updateCount);
+  function extractText(){
+    const original = source.value;
+    if(!original.trim()){ $('status').textContent='请先粘贴需要清洗的文本。'; source.focus(); return; }
+    const items=[], occupied=[];
+    const add=(type,value,start=-1,end=-1)=>{
+      value=String(value??'').trim().replace(/[，,;；]+$/g,'');
+      if(!value)return;
+      items.push({type,value});
+      if(start>=0&&end>start)occupied.push([start,end]);
+    };
+    const urlRe=/\bhttps?:\/\/[^\s<>"'，。；;]+/gi;
+    for(const m of original.matchAll(urlRe)){const v=m[0].replace(/[),.!?，。；;]+$/g,'');add('网址',v,m.index,m.index+v.length);}
+    const emailRe=/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+    for(const m of original.matchAll(emailRe))add('邮箱',m[0],m.index,m.index+m[0].length);
+
+    if($('secrets').checked){
+      const labeledRe=/(?:Steam\s*(?:账号|帐号|号|ID)?|邮箱\s*(?:账号|帐号|号|密码)?|账号|帐号|用户名|登录名|密码|口令|passwd|password|密|卡密|CDK|兑换码|激活码|产品密钥|product\s*key)\s*[:：=]\s*([^\s，,;；|]+)/gi;
+      for(const m of original.matchAll(labeledRe)){
+        const value=m[1].replace(/[。.!]+$/g,'');
+        const label=m[0].slice(0,m[0].lastIndexOf(m[1])).replace(/[:：=]\s*$/,'').trim();
+        const type=/卡密|CDK|兑换码|激活码|产品密钥|product\s*key/i.test(label)?'卡密/兑换码':
+          /密码|口令|passwd|password|密/i.test(label)?'密码':
+          /邮箱/i.test(label)?'邮箱账号':'账号标识';
+        const start=m.index+m[0].lastIndexOf(m[1]);add(type,value,start,start+value.length);
+      }
+    }
+    const domainRe=/\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?:\/[^\s，。；;]*)?/gi;
+    for(const m of original.matchAll(domainRe)){const v=m[0].replace(/[),.!?，。；;]+$/g,'');if(!v.includes('@')&&!/^https?:\/\//i.test(v))add('域名/地址',v,m.index,m.index+v.length);}
+    const covered=pos=>occupied.some(([a,b])=>pos>=a&&pos<b);
+    if($('numbers').checked){
+      const re=/(?<![A-Za-z@])\d+(?:[.:/_-]\d+)*(?![A-Za-z@])/g;
+      for(const m of original.matchAll(re))if(!covered(m.index))add('数字串',m[0],m.index,m.index+m[0].length);
+    }
+    const tokenRe=/\b(?=[A-Za-z0-9_-]{6,}\b)(?=[A-Za-z0-9_-]*[A-Za-z])(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]+\b/g;
+    for(const m of original.matchAll(tokenRe))if(!covered(m.index))add('字母数字串',m[0],m.index,m.index+m[0].length);
+    if($('dedupe').checked){const seen=new Set();extracted=items.filter(x=>{const k=x.type+'\u0000'+x.value;if(seen.has(k))return false;seen.add(k);return true;});}else extracted=items;
+    renderResults();
+    $('status').textContent=extracted.length?`提取完成，共找到 ${extracted.length} 项。`:'没有识别到内容，可以尝试调整文本格式。';
+  }
+  async function copyText(text){
+    try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true;}}catch(e){}
+    const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();return ok;
+  }
+  function renderResults(){
+    const host=$('results');host.innerHTML='';$('resultCount').textContent=`${extracted.length} 项`;$('copyAll').disabled=!extracted.length;
+    if(!extracted.length){host.innerHTML='<div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-5 py-12 text-center"><p class="font-semibold text-slate-700">没有找到可提取的信息</p><p class="mt-1 text-sm text-slate-500">试试包含“账号：”“密码：”或网址的文本</p></div>';return;}
+    const palette={'网址':'bg-blue-100 text-blue-700','邮箱':'bg-violet-100 text-violet-700','账号标识':'bg-indigo-100 text-indigo-700','邮箱账号':'bg-violet-100 text-violet-700','密码':'bg-amber-100 text-amber-800','卡密/兑换码':'bg-rose-100 text-rose-700','域名/地址':'bg-cyan-100 text-cyan-800','数字串':'bg-slate-100 text-slate-700','字母数字串':'bg-emerald-100 text-emerald-700'};
+    extracted.forEach((item,i)=>{
+      const card=document.createElement('article');card.className='flex min-w-0 items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 transition hover:border-indigo-200 hover:shadow-sm sm:p-4';
+      const content=document.createElement('div');content.className='min-w-0 flex-1';
+      const row=document.createElement('div');row.className='mb-2 flex flex-wrap items-center gap-2';
+      const badge=document.createElement('span');badge.className=`rounded-lg px-2 py-1 text-[11px] font-bold ${palette[item.type]||'bg-slate-100 text-slate-700'}`;badge.textContent=item.type;
+      const num=document.createElement('span');num.className='text-xs text-slate-400';num.textContent=`#${i+1}`;row.append(badge,num);
+      const val=document.createElement('div');val.className='result-value select-text text-sm leading-6 text-slate-800 sm:text-[15px]';val.textContent=item.value;content.append(row,val);
+      const btn=document.createElement('button');btn.type='button';btn.className='copy-btn inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700';
+      btn.textContent='复制';btn.addEventListener('click',async()=>{const ok=await copyText(item.value);btn.textContent=ok?'已复制':'重试';$('status').textContent=ok?`已复制：${item.type}`:'复制失败，请检查浏览器剪贴板权限。';setTimeout(()=>btn.textContent='复制',1200);});
+      card.append(content,btn);host.append(card);
+    });
+  }
+  function clearCleaner(){source.value='';extracted=[];updateCount();renderResults();$('status').textContent='';}
+  $('extractBtn').addEventListener('click',extractText);$('clearInput').addEventListener('click',()=>{source.value='';updateCount();source.focus();});$('sampleBtn').addEventListener('click',()=>{source.value=sample;updateCount();$('status').textContent='已载入演示文本，账号和密码均为虚构示例。';});
+  $('copyAll').addEventListener('click',async()=>{const ok=await copyText(extracted.map(x=>`${x.type}\t${x.value}`).join('\n'));$('status').textContent=ok?'已复制全部结果。':'复制失败，请检查剪贴板权限。';});
+  source.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')extractText();});
+
+  // Existing Timeline Chat API integration. Render untrusted text via textContent to avoid HTML injection.
+  const chat=$('chat');
+  function addChatText(item){
+    const outer=document.createElement('div');outer.className='flex justify-end';
+    const bubble=document.createElement('div');bubble.className='max-w-[85%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-gradient-to-br from-emerald-500 to-teal-500 px-4 py-3 text-sm leading-6 text-white shadow-sm';bubble.textContent=item.content||'';outer.append(bubble);chat.append(outer);
+  }
+  function addChatFile(item){
+    const outer=document.createElement('div');outer.className='flex justify-end';
+    const link=document.createElement('a');link.href=`/file/${encodeURIComponent(item.file_key||'')}`;link.target='_blank';link.rel='noopener';link.className='block max-w-[85%] rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:border-indigo-200';link.textContent='📎 打开附件';outer.append(link);chat.append(outer);
+  }
+  async function loadChat(){
+    $('chatStatus').textContent='正在连接服务…';
+    try{const res=await fetch('/api/list');if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();chat.innerHTML='';
+      if(!Array.isArray(data)||!data.length){chat.innerHTML='<div class="py-12 text-center text-sm text-slate-400">还没有消息，发送文字或上传文件开始使用。</div>';}
+      else data.forEach(item=>{if(item.type==='text')addChatText(item);if(item.type==='file')addChatFile(item);});
+      chat.scrollTop=chat.scrollHeight;$('chatStatus').textContent='服务已连接';
+    }catch(e){chat.innerHTML='<div class="mx-auto max-w-md rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800">暂时无法连接聊天后端。文本清洗工具仍可独立使用；请确认 Cloudflare Pages Functions 和 D1/R2 绑定已部署。</div>';$('chatStatus').textContent='后端未连接';}
+  }
+  async function sendChat(){
+    const input=$('chatInput'),value=input.value.trim();if(!value)return;
+    $('sendChat').disabled=true;
+    try{const res=await fetch('/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'text',content:value})});if(!res.ok)throw new Error('send failed');input.value='';await loadChat();}
+    catch(e){$('chatStatus').textContent='发送失败，请检查后端配置。';}
+    finally{$('sendChat').disabled=false;}
+  }
+  $('sendChat').addEventListener('click',sendChat);$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+  $('pickFile').addEventListener('click',()=>$('chatFile').click());
+  $('chatFile').addEventListener('change',async function(){
+    const file=this.files&&this.files[0];if(!file)return;
+    $('chatStatus').textContent='正在上传文件…';
+    try{const form=new FormData();form.append('file',file);const up=await fetch('/api/upload',{method:'POST',body:form});if(!up.ok)throw new Error('upload failed');const d=await up.json();const add=await fetch('/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'file',file_key:d.file_key})});if(!add.ok)throw new Error('save failed');await loadChat();}
+    catch(e){$('chatStatus').textContent='上传失败，请检查 R2 配置。';}
+    finally{this.value='';}
+  });
+  async function clearChat(){if(!confirm('确定清空所有 Timeline Chat 记录？'))return;try{const res=await fetch('/api/clear',{method:'POST'});if(!res.ok)throw new Error();await loadChat();}catch(e){$('chatStatus').textContent='清空失败，请检查后端配置。';}}
+  $('chatClear').addEventListener('click',clearChat);
+  $('headerClear').addEventListener('click',()=>{if($('view-cleaner').classList.contains('active'))clearCleaner();else loadChat();});
+  updateCount();
+})();
+</script>
+</body>
+</html>
