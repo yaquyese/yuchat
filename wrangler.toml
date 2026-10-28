@@ -1,12 +1,25 @@
+
 name = "yuchat"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "./public"
 
+# 默认环境绑定
 [[d1_databases]]
 binding = "DB"
 database_name = "yuchat"
-pages_build_output_dir = "./public"
 database_id = "4b39abac-f1ac-458c-a827-b15b16611420"
 
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "files"
+
+# Preview 预览环境绑定
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "yuchat"
+database_id = "4b39abac-f1ac-458c-a827-b15b16611420"
+
+[[env.preview.r2_buckets]]
+binding = "BUCKET"
+bucket_name = "files"
+
